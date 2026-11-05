@@ -3,6 +3,14 @@ using UnityEngine;
 
 public class ObjectDrag : MonoBehaviour
 {
+    [Header("Target Settings")]
+    public Vector2 targetPosition;
+    public float targetRotation;
+
+    [Header("Snap Settings")]
+    public float positionTolerance = 0.5f;
+    public float rotationTolerance = 5f;
+
     private Camera mainCamera;
     private Vector3 dragOffset;
     private Vector3 startPosition;
@@ -11,6 +19,9 @@ public class ObjectDrag : MonoBehaviour
     private int originalSortingOrder;
 
     private bool isDragging = false;
+    private bool isLocked = false;
+
+    public bool IsLocked => isLocked;
 
     private void Awake()
     {
@@ -27,9 +38,19 @@ public class ObjectDrag : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (isLocked)
+        {
+            return;
+        }
+
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
+        }
+
+        if (mainCamera == null)
+        {
+            return;
         }
 
         Vector3 mousePosition = Input.mousePosition;
@@ -49,6 +70,11 @@ public class ObjectDrag : MonoBehaviour
 
     private void OnMouseOver()
     {
+        if (isLocked)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(1))
         {
             transform.Rotate(0f, 0f, 90f);
@@ -57,7 +83,7 @@ public class ObjectDrag : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (!isDragging || mainCamera == null)
+        if (isLocked || !isDragging || mainCamera == null)
         {
             return;
         }
@@ -84,6 +110,11 @@ public class ObjectDrag : MonoBehaviour
             spriteRenderer.sortingOrder = originalSortingOrder;
         }
 
+        if (isLocked)
+        {
+            return;
+        }
+
         PuzzleManager manager =
             FindFirstObjectByType<PuzzleManager>();
 
@@ -93,8 +124,54 @@ public class ObjectDrag : MonoBehaviour
         }
     }
 
+    // Check whether the object is close enough to its target
+    public bool TrySnapToTarget()
+    {
+        if (isLocked)
+        {
+            return false;
+        }
+
+        float distance = Vector2.Distance(
+            transform.position,
+            targetPosition
+        );
+
+        float angleDifference = Mathf.Abs(
+            Mathf.DeltaAngle(
+                transform.eulerAngles.z,
+                targetRotation
+            )
+        );
+
+        if (distance <= positionTolerance &&
+            angleDifference <= rotationTolerance)
+        {
+            transform.position = new Vector3(
+                targetPosition.x,
+                targetPosition.y,
+                startPosition.z
+            );
+
+            transform.rotation = Quaternion.Euler(
+                0f,
+                0f,
+                targetRotation
+            );
+
+            isLocked = true;
+
+            return true;
+        }
+
+        return false;
+    }
+
     public void ResetPosition()
     {
-        transform.position = startPosition;
+        if (!isLocked)
+        {
+            transform.position = startPosition;
+        }
     }
 }

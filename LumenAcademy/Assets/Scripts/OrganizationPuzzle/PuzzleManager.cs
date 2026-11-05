@@ -7,6 +7,8 @@ public class PuzzleManager : MonoBehaviour
     public BoxCollider2D puzzleBox;
     public ObjectDrag[] puzzleObjects;
 
+    private bool puzzleCompleted = false;
+
     // Check whether an object is completely inside the puzzle box
     public bool IsInsideBox(ObjectDrag item)
     {
@@ -15,7 +17,6 @@ public class PuzzleManager : MonoBehaviour
             return false;
         }
 
-        // Support Box Collider 2D and Polygon Collider 2D
         Collider2D itemCollider =
             item.GetComponent<Collider2D>();
 
@@ -56,15 +57,14 @@ public class PuzzleManager : MonoBehaviour
     // Check object placement after dragging
     public void CheckObjectPlacement(ObjectDrag item)
     {
-        if (item == null)
+        if (item == null || item.IsLocked)
         {
             return;
         }
 
-        // Make sure physics uses the latest Transform positions
         Physics2D.SyncTransforms();
 
-        // Check if the object is inside the puzzle box
+        // Check whether the object is inside the puzzle box
         if (!IsInsideBox(item))
         {
             item.ResetPosition();
@@ -72,7 +72,7 @@ public class PuzzleManager : MonoBehaviour
             return;
         }
 
-        // Check if the object overlaps with another object
+        // Check whether the object overlaps with another object
         foreach (ObjectDrag other in puzzleObjects)
         {
             if (other == null || other == item)
@@ -88,6 +88,39 @@ public class PuzzleManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Object placed successfully!");
+        // Try to snap the object to its target position and rotation
+        if (item.TrySnapToTarget())
+        {
+            Physics2D.SyncTransforms();
+
+            Debug.Log(item.name + " snapped and locked!");
+
+            CheckPuzzleCompletion();
+        }
+        else
+        {
+            Debug.Log("Object placed, but not in the correct position.");
+        }
+    }
+
+    // Check whether all puzzle objects are locked
+    private void CheckPuzzleCompletion()
+    {
+        if (puzzleCompleted)
+        {
+            return;
+        }
+
+        foreach (ObjectDrag item in puzzleObjects)
+        {
+            if (item == null || !item.IsLocked)
+            {
+                return;
+            }
+        }
+
+        puzzleCompleted = true;
+
+        Debug.Log("Puzzle Completed!");
     }
 }
