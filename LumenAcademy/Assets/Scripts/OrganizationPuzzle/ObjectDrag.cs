@@ -7,19 +7,25 @@ public class ObjectDrag : MonoBehaviour
     private Vector3 dragOffset;
     private Vector3 startPosition;
 
-    [Header("Puzzle Settings")]
-    public Vector3 correctPosition;
-    public float positionTolerance = 0.6f;
+    private SpriteRenderer spriteRenderer;
+    private int originalSortingOrder;
+
+    private bool isDragging = false;
 
     private void Awake()
     {
         mainCamera = Camera.main;
         startPosition = transform.position;
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (spriteRenderer != null)
+        {
+            originalSortingOrder = spriteRenderer.sortingOrder;
+        }
     }
 
     private void OnMouseDown()
-{
-    if (Input.GetMouseButtonDown(0))
     {
         if (mainCamera == null)
         {
@@ -33,24 +39,25 @@ public class ObjectDrag : MonoBehaviour
             mainCamera.ScreenToWorldPoint(mousePosition);
 
         dragOffset = transform.position - worldPosition;
+        isDragging = true;
+
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sortingOrder = 100;
+        }
     }
-}
 
     private void OnMouseOver()
-{
-    if (Input.GetMouseButtonDown(1))
     {
-        transform.Rotate(0f, 0f, 90f);
+        if (Input.GetMouseButtonDown(1))
+        {
+            transform.Rotate(0f, 0f, 90f);
+        }
     }
-}
 
     private void OnMouseDrag()
     {
-        if (!Input.GetMouseButton(0))
-    {
-        return;
-    }
-        if (mainCamera == null)
+        if (!isDragging || mainCamera == null)
         {
             return;
         }
@@ -70,21 +77,20 @@ public class ObjectDrag : MonoBehaviour
 
     private void OnMouseUp()
     {
+        isDragging = false;
+
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sortingOrder = originalSortingOrder;
+        }
+
         PuzzleManager manager =
             FindFirstObjectByType<PuzzleManager>();
 
         if (manager != null)
         {
-            manager.CheckPuzzle();
+            manager.CheckObjectPlacement(this);
         }
-    }
-
-    public bool IsAtCorrectPosition()
-    {
-        return Vector2.Distance(
-            transform.position,
-            correctPosition
-        ) <= positionTolerance;
     }
 
     public void ResetPosition()
