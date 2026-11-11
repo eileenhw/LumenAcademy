@@ -8,6 +8,7 @@ public class TransitionManager : MonoBehaviour
 {
     [Header("Scene Transition")]
     [SerializeField] private string insideexample = "insideexample";
+    public GameObject proximityText;
 
     public Transform cam;
     public float playerActivateDistance;
@@ -17,12 +18,17 @@ public class TransitionManager : MonoBehaviour
     {
         RaycastHit hit;
         active = Physics.Raycast(cam.position, cam.TransformDirection(Vector3.forward), out hit, playerActivateDistance);
+        proximityText.SetActive(false);
 
-        if (Input.GetKeyDown(KeyCode.E) && active == true && hit.transform.CompareTag("Door") == true)
+        if (active == true && hit.transform.CompareTag("Door") == true)
         {
-            if (hit.transform != null)
+            proximityText.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.E) && active == true && hit.transform.CompareTag("Door") == true)
             {
-                StartCoroutine(TransitionToInside());
+                if (hit.transform != null)
+                {
+                    StartCoroutine(TransitionToInside());
+                }
             }
         }
     }
