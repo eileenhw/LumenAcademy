@@ -9,6 +9,9 @@ public class TransitionManager : MonoBehaviour
     [Header("Scene Transition")]
     [SerializeField] private string insideexample = "insideexample";
     public GameObject proximityText;
+    public RectTransform starAsset;
+    public float shrinkDuration = 0.80f;
+    public static bool enteredDoor = false;
 
     public Transform cam;
     public float playerActivateDistance;
@@ -35,7 +38,20 @@ public class TransitionManager : MonoBehaviour
 
     private IEnumerator TransitionToInside()
     {
-        yield return new WaitForSeconds(0.5f);
+        float startSize = starAsset.sizeDelta.x;
+        yield return null;
+        float timer = 0;
+        while (timer < shrinkDuration)
+        {
+            timer += Time.deltaTime;
+            float progress = timer / shrinkDuration;
+            float size = Mathf.SmoothStep(startSize, 0f, progress);
+            starAsset.sizeDelta = new Vector2(size, size);
+            yield return null;
+        }
+        starAsset.sizeDelta = Vector2.zero;
+        yield return new WaitForSeconds(0.2f);
+        enteredDoor = true;
         SceneManager.LoadScene(insideexample);
     }
 }
