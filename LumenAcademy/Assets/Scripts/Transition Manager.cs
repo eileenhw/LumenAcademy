@@ -9,10 +9,12 @@ public class TransitionManager : MonoBehaviour
     [Header("Scene Transition")]
     [SerializeField] private string insideexample = "insideexample";
     public GameObject proximityText;
+    public GameObject proximityDialogue;
     public RectTransform starAsset;
     public float shrinkDuration = 0.80f;
     public static bool enteredDoor = false;
 
+    public Dialogue dialogue;
     public Transform cam;
     public float playerActivateDistance;
     bool active = false;
@@ -22,6 +24,7 @@ public class TransitionManager : MonoBehaviour
         RaycastHit hit;
         active = Physics.Raycast(cam.position, cam.TransformDirection(Vector3.forward), out hit, playerActivateDistance);
         proximityText.SetActive(false);
+        proximityDialogue.SetActive(false);
 
         if (active == true && hit.transform.CompareTag("Door") == true)
         {
@@ -31,6 +34,16 @@ public class TransitionManager : MonoBehaviour
                 if (hit.transform != null)
                 {
                     StartCoroutine(TransitionToInside());
+                }
+            }
+        } else if (active == true && hit.transform.CompareTag("NPC") == true && !dialogue.gameObject.activeSelf)
+        {
+            proximityDialogue.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.E) && active == true && hit.transform.CompareTag("NPC") == true)
+            {
+                if (hit.transform != null)
+                {
+                    dialogue.startDialogue();
                 }
             }
         }
