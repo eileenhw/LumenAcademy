@@ -7,6 +7,9 @@ public class PuzzleManager : MonoBehaviour
     public BoxCollider2D puzzleBox;
     public ObjectDrag[] puzzleObjects;
 
+    [Header("UI Settings")]
+    public PuzzleUIManager uiManager;
+
     private bool puzzleCompleted = false;
 
     // Check whether an object is completely inside the puzzle box
@@ -122,5 +125,11 @@ public class PuzzleManager : MonoBehaviour
         puzzleCompleted = true;
 
         Debug.Log("Puzzle Completed!");
+
+        // Show the success UI
+        if (uiManager != null)
+        {
+            uiManager.ShowSuccess();
+        }
     }
 }
