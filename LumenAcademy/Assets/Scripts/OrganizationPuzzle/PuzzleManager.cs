@@ -8,7 +8,7 @@ public class PuzzleManager : MonoBehaviour
     public ObjectDrag[] puzzleObjects;
 
     [Header("UI Settings")]
-    public PuzzleUIManager uiManager;
+    public MonoBehaviour uiManager;
 
     private bool puzzleCompleted = false;
 
@@ -129,7 +129,7 @@ public class PuzzleManager : MonoBehaviour
         // Show the success UI
         if (uiManager != null)
         {
-            uiManager.ShowSuccess();
+            uiManager.SendMessage("ShowSuccess", SendMessageOptions.DontRequireReceiver);
         }
     }
 }
