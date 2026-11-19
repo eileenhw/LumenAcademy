@@ -42,7 +42,10 @@ public class MDGameManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube((Vector2)(locations.transform.position) + offset, new Vector3(range * 2, range * 2, 0f));
+        if (location != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube((Vector2)(locations.transform.position) + offset, new Vector3(range * 2, range * 2, 0f));
+        }
     }
 }
