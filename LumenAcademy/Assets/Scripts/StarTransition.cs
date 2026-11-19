@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class Inside : MonoBehaviour
+public class StarTransition : MonoBehaviour
 {
     public RectTransform starAsset;
     public float growDuration = 0.80f;

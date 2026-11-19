@@ -8,6 +8,7 @@ public class TransitionManager : MonoBehaviour
 {
     [Header("Scene Transition")]
     [SerializeField] private string insideexample = "insideexample";
+    [SerializeField] private string MD = "MagicalDistortion";
     public GameObject proximityText;
     public GameObject proximityDialogue;
     public RectTransform starAsset;
@@ -46,6 +47,14 @@ public class TransitionManager : MonoBehaviour
                     dialogue.startDialogue();
                 }
             }
+        } else if (Input.GetKeyDown(KeyCode.E) && active == true && hit.transform.CompareTag("Puzzle 1") == true)
+        {
+            {
+                if (hit.transform != null)
+                {
+                    StartCoroutine(TransitionToMD());
+                }
+            }
         }
     }
 
@@ -66,5 +75,24 @@ public class TransitionManager : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         enteredDoor = true;
         SceneManager.LoadScene(insideexample);
+    }
+
+    private IEnumerator TransitionToMD()
+    {
+        float startSize = starAsset.sizeDelta.x;
+        yield return null;
+        float timer = 0;
+        while (timer < shrinkDuration)
+        {
+            timer += Time.deltaTime;
+            float progress = timer / shrinkDuration;
+            float size = Mathf.SmoothStep(startSize, 0f, progress);
+            starAsset.sizeDelta = new Vector2(size, size);
+            yield return null;
+        }
+        starAsset.sizeDelta = Vector2.zero;
+        yield return new WaitForSeconds(0.2f);
+        enteredDoor = true;
+        SceneManager.LoadScene(MD);
     }
 }

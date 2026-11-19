@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Door
   - NPC
+  - Puzzle 1
   layers:
   - Default
   - TransparentFX
