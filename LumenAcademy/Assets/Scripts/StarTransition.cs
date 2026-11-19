@@ -37,4 +37,28 @@ public class StarTransition : MonoBehaviour
         }
         starAsset.sizeDelta = new Vector2(fullSize, fullSize);
     }
+
+    private IEnumerator TransitionOut(string sceneName)
+    {
+        float startSize = starAsset.sizeDelta.x;
+        yield return null;
+        float timer = 0;
+        while (timer < growDuration)
+        {
+            timer += Time.deltaTime;
+            float progress = timer / growDuration;
+            float size = Mathf.SmoothStep(startSize, 0f, progress);
+            starAsset.sizeDelta = new Vector2(size, size);
+            yield return null;
+        }
+        starAsset.sizeDelta = Vector2.zero;
+        yield return new WaitForSeconds(0.2f);
+        TransitionManager.enteredDoor = true;
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void LeaveTo(string sceneName)
+    {
+        StartCoroutine(TransitionOut(sceneName));
+    }
 }

@@ -215,6 +215,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TransitionManager
   insideexample: insideexample
+  MD: MagicalDistortion
+  organization: OrganizationPuzzleScene
   proximityText: {fileID: 1406684751}
   proximityDialogue: {fileID: 1655085960}
   starAsset: {fileID: 812618028}
@@ -16015,8 +16017,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3221026308765886814, guid: fb3887222e2f5954380b2b9c90536f0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3908809833909515909}
   m_SourcePrefab: {fileID: 100100000, guid: fb3887222e2f5954380b2b9c90536f0d, type: 3}
+--- !u!1 &3908809833909515908 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3221026308765886814, guid: fb3887222e2f5954380b2b9c90536f0d, type: 3}
+  m_PrefabInstance: {fileID: 3908809833909515907}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3908809833909515909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3908809833909515908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14d84a784d445ec4980484afe74b08bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StarTransition
+  starAsset: {fileID: 812618028}
+  growDuration: 0.8
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
