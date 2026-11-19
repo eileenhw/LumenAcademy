@@ -25,11 +25,11 @@ public class StarTransition : MonoBehaviour
     private IEnumerator TransitionFromOutside()
     {
         float startSize = starAsset.sizeDelta.x;
-        yield return null;
+        yield return new WaitForSecondsRealtime(0.2f);
         float timer = 0;
         while (timer < growDuration)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime;
             float progress = timer / growDuration;
             float size = Mathf.SmoothStep(0f, fullSize, progress);
             starAsset.sizeDelta = new Vector2(size, size);
