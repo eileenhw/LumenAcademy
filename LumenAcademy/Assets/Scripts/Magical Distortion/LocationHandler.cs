@@ -15,7 +15,7 @@ public class LocationHandler : MonoBehaviour,
 
     [Header("Settings")]
     public float checkDelay = 1f;
-    public float snapDistance = 30f;
+    public float snapDistance = .1f;
 
     [Header("Completion")]
     public UnityEvent onMatched;

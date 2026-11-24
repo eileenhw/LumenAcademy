@@ -12,7 +12,7 @@ public class Drag : MonoBehaviour
     
     public Transform targetCircle; 
     public float checkDelay = 1f; 
-    public float snapDistance = 10f; 
+    public float snapDistance = .1f; 
 
     public UnityEvent onMatched;
     private Coroutine checkCoroutine; //sets up coroutine 
@@ -56,7 +56,7 @@ public class Drag : MonoBehaviour
     {
         isDragging = false;
 
-        // checks after releasing the mouse
+        //checks after releasing the mouse
         if(checkCoroutine != null)StopCoroutine(checkCoroutine);
 
         checkCoroutine = StartCoroutine(CheckPosition());
